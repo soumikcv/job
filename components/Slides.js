@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { Text, View, ScrollView, Dimensions } from 'react-native';
-import {Button} from 'react-native-elements'; 
+import {Button} from 'react-native-elements';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -56,7 +56,7 @@ const styles = {
 	textStyle: {
 		fontSize: 30,
 		color: 'white',
-		margin: '15 0'
+		marginBottom: 15
 	},
 	buttonStyle: {
 		backgroundColor: '#0288D1',

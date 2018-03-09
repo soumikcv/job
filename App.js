@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Platform, StatusBar} from 'react-native';
 import { TabNavigator, StackNavigator } from 'react-navigation';
+import {Provider} from 'react-redux';
 
 import WelcomeScreen from './screens/WelcomeScreen';
 import AuthScreen from './screens/AuthScreen';
@@ -9,6 +10,7 @@ import DeckScreen from './screens/DeckScreen';
 import ReviewScreen from './screens/ReviewScreen';
 import SettingsScreen from './screens/SettingsScreen';
 
+import store from './store';
 export default class App extends React.Component {
   render() {
 
@@ -25,21 +27,28 @@ export default class App extends React.Component {
               settings: {screen: SettingsScreen }
             })
           }
+        },{
+            tabBarOptions: {
+            style: {
+              paddingTop: Platform.OS === 'ios' ? 0 : 24
+            }
+          },
         })
       }
     },
     {
-    tabBarOptions: {
-        style: {
-          paddingTop: Platform.OS === 'ios' ? 0 : 24
-        }
-      }
+    navigationOptions:{
+      tabBarVisible: false
+    },
+    lazy: true
     });
 
     return (
-      <View style={styles.container}>
-        <MainNavigator />
-      </View>
+      <Provider store={store}>
+        <View style={styles.container}>
+          <MainNavigator />
+        </View>
+      </Provider>
     );
   }
 }
