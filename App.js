@@ -1,5 +1,6 @@
+import Expo, { Notifications } from 'expo';
 import React from 'react';
-import { StyleSheet, Text, View, Platform, StatusBar} from 'react-native';
+import { StyleSheet, Text, View, Platform, StatusBar, Alert} from 'react-native';
 import { TabNavigator, StackNavigator } from 'react-navigation';
 import {Provider} from 'react-redux';
 
@@ -11,9 +12,27 @@ import ReviewScreen from './screens/ReviewScreen';
 import SettingsScreen from './screens/SettingsScreen';
 
 import store from './store';
-export default class App extends React.Component {
-  render() {
+import registerForNotifications from './services/push_notifications';
 
+export default class App extends React.Component {
+
+  componentDidMount() {
+    registerForNotifications();
+    Notifications.addListener((notification) => {
+      const { data: { text }, origin } = notification;
+
+      if (origin === 'received' && text) {
+        Alert.alert(
+          'New Push Notification',
+          text,
+          [{ text: 'Ok.' }]
+        );
+      }
+    });
+  }
+
+
+  render() {
     const MainNavigator = TabNavigator({
       welcome: { screen: WelcomeScreen },
       auth: { screen: AuthScreen },
@@ -25,20 +44,28 @@ export default class App extends React.Component {
             screen: StackNavigator({
               review: { screen: ReviewScreen },
               settings: {screen: SettingsScreen }
+            },{
+              lazy: false
             })
           }
         },{
+            lazy:false,
+            tabBarPosition :'bottom',
             tabBarOptions: {
+            showIcon:true,
             style: {
-              paddingTop: Platform.OS === 'ios' ? 0 : 24
-            }
-          },
+              paddingTop: 5,
+              height:65
+            },
+            labelStyle :{fontSize:10}
+          }
         })
       }
     },
     {
     navigationOptions:{
-      tabBarVisible: false
+      tabBarVisible: false,
+      swipeEnabled: false
     },
     lazy: true
     });
